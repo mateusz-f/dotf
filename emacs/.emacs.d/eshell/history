@@ -1,0 +1,5 @@
+ls
+echo $TERM
+ls
+ls
+zsh
