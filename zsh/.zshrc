@@ -66,5 +66,6 @@ preexec() {
 	print -Pn "\e]0;$1\a" 
 }
 
-
-
+# share history
+setopt append_history
+setopt share_history
