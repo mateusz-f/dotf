@@ -3,7 +3,6 @@ URxvt*background:Black
 URxvt*scrollBar:false
 URxvt*font:-*-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
 xft.dpi:       96      ! this is an inline comment
-#urxvt.font: xft:inconsolata:pixelsize=16
 
 XTerm*termName:         rxvt-256color
 

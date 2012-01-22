@@ -71,8 +71,6 @@ setopt append_history
 setopt share_history
 
 
-
-
 #echo -ne '\e]4;0;#000000\a'   # black
 #echo -ne '\e]4;1;#BF0000\a'   # red
 #echo -ne '\e]4;2;#00BF00\a'   # green
@@ -107,3 +105,15 @@ echo -ne '\e]4;12;#3b5d9a\a'  # bold blue
 echo -ne '\e]4;13;#a57ac4\a'  # bold magenta
 echo -ne '\e]4;14;#5da7e1\a'  # bold cyan
 echo -ne '\e]4;15;#d3d7cf\a'  # bold white
+
+dont-log-out() { 
+	zle -M "na-ah..." 
+};
+
+if [ -n "$SHOULD_DISABLE_QUIT" ] ; then
+	if [ x0 = x"$WINDOW"  ] ; then
+		zle -N dont-log-out;
+		bindkey '^D' dont-log-out
+		setopt ignore_eof
+	fi
+fi
