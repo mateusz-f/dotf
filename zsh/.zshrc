@@ -1,18 +1,40 @@
+bindkey -e
+
+source /etc/profile
 source $HOME/.profile
 
+alias ff="find | grep -i "
 alias vi="vim"
 alias ll="ls -al"
 alias ls="ls --color"
+alias pacman="sudo pacman"
+alias netcfg="sudo netcfg"
+alias reboot="sudo reboot"
+alias halt="sudo halt"
 #alias pacman=pacman-color
-alias o=mopen
+alias mopen=exo-open
+alias o=exo-open
+alias sqlplus="rlwrap sqlplus"
+alias -g TVM="\$(cat vmid)" 
 
 autoload -U compinit
 compinit
 zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
 zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'
-autoload -U promptinit
+autoload -U promptinit 
 promptinit
 
+known_extensions=( avi flv rmvb jpg png )
+for ext in "${known_extensions[@]}" ; do 
+	alias -s "${ext}"=exo-open
+done
+
+#zstyle :mime: mailcap ~/.mailcap /usr/local/etc/mailcap /etc/mailcap
+#zstyle :mime: mime-types ~/.mime.types /usr/local/etc/mime.types /etc/mime.types
+#autoload -U zsh-mime-setup 
+#zsh-mime-setup
+
+setopt AUTO_CD
 
 autoload colors
 colors
@@ -28,25 +50,6 @@ SAVEHIST=1000
 HISTFILE=~/.zshHistory
 
 
-alias -s avi=mopen
-alias -s jpg=mopen
-alias -s jpeg=mopen
-alias -s flv=mopen
-alias -s mkv=mopen
-alias -s rmvb=mopen
-alias -s ogm=mopen
-alias -s pdf=mopen
-alias -s rar=mopen
-alias -s html=mopen
-alias -s htm=mopen
-alias -s zip=mopen
-alias -s ods=mopen
-alias -s odf=mopen
-alias -s odt=mopen
-alias -s chm=mopen
-alias -s png=mopen
-alias -s chm=mopen
-
 alias napi="napi-bash -c '$1'"
 
 zstyle ':completion:*:processes' command 'ps xw -o pid,tty,time,args'
@@ -59,34 +62,29 @@ zstyle -e ':completion:*' list-colors 'reply=( "'$highlights'" )'
 unset highlights
 
 precmd() {
-	print -Pn "\e]0;%~\a"
+	if [ -n "$DISPLAY" ] ; then
+		if [ "screen" = "$TERM" ] ; then
+			title=$(basename $PWD)
+			echo -ne "\ek${title}\e\\"
+		else	
+			print -Pn "\e]0;%~\a"
+		fi
+	fi
 }
 
 preexec() {
-	print -Pn "\e]0;$1\a" 
+	if [ -n "$DISPLAY" ] ; then
+		if [ "screen" = "$TERM" ] ; then
+			echo -ne "\ek${1}\e\\"
+		else	
+			print -Pn "\e]0;$1\a" 
+		fi
+	fi
 }
 
 # share history
 setopt append_history
 setopt share_history
-
-
-#echo -ne '\e]4;0;#000000\a'   # black
-#echo -ne '\e]4;1;#BF0000\a'   # red
-#echo -ne '\e]4;2;#00BF00\a'   # green
-#echo -ne '\e]4;3;#BFBF00\a'   # yellow
-#echo -ne '\e]4;4;#0000BF\a'   # blue
-#echo -ne '\e]4;5;#BF00BF\a'   # magenta
-#echo -ne '\e]4;6;#00BFBF\a'   # cyan
-#echo -ne '\e]4;7;#BFBFBF\a'   # white (light grey really)
-#echo -ne '\e]4;8;#404040\a'   # bold black (i.e. dark grey)
-#echo -ne '\e]4;9;#FF4040\a'   # bold red
-#echo -ne '\e]4;10;#40FF40\a'  # bold green
-#echo -ne '\e]4;11;#FFFF40\a'  # bold yellow
-#echo -ne '\e]4;12;#4040FF\a'  # bold blue
-#echo -ne '\e]4;13;#FF40FF\a'  # bold magenta
-#echo -ne '\e]4;14;#40FFFF\a'  # bold cyan
-#echo -ne '\e]4;15;#FFFFFF\a'  # bold white
 
 
 echo -ne '\e]4;0;#101010\a'   # black
@@ -106,14 +104,9 @@ echo -ne '\e]4;13;#a57ac4\a'  # bold magenta
 echo -ne '\e]4;14;#5da7e1\a'  # bold cyan
 echo -ne '\e]4;15;#d3d7cf\a'  # bold white
 
-dont-log-out() { 
-	zle -M "na-ah..." 
-};
 
-if [ -n "$SHOULD_DISABLE_QUIT" ] ; then
-	if [ x0 = x"$WINDOW"  ] ; then
-		zle -N dont-log-out;
-		bindkey '^D' dont-log-out
-		setopt ignore_eof
-	fi
-fi
+# c+x, c+e - edit current command in $EDITOR
+#autoload edit-command-line                                                                                                              /home/mateusz 9:47
+#zle -N edit-command-line                                                                                                                /home/mateusz 9:47
+#bindkey '^x^e' edit-command-line
+
