@@ -1,7 +1,9 @@
 bindkey -e
 
 source /etc/profile
-source $HOME/.profile
+if [ -f $HOME/.profile ] ; then
+	source $HOME/.profile
+fi
 
 alias ff="find | grep -i "
 alias vi="vim"
