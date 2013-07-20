@@ -112,3 +112,6 @@ echo -ne '\e]4;15;#d3d7cf\a'  # bold white
 #zle -N edit-command-line                                                                                                                /home/mateusz 9:47
 #bindkey '^x^e' edit-command-line
 
+# startx if on first tty
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+
